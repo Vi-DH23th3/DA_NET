@@ -27,6 +27,7 @@ namespace quanlynhansach
             ListViewItem item = new ListViewItem(moi);
             listView1.Items.Add(item);
         }
+        //Hàm kt trùng mã
         Boolean kt_trungMa(string ma)
         {
             for (int i = 0; i < listView1.Items.Count; i++)
@@ -38,6 +39,7 @@ namespace quanlynhansach
             }
             return false;
         }
+        //Mở kết nối với csdl
         public void Moketnoi(SqlConnection con)
         {
             if (con.State == ConnectionState.Open)
@@ -176,6 +178,31 @@ namespace quanlynhansach
 
         private void btnLuuFile_Click(object sender, EventArgs e)
         {
+            // Đổi màu nền của tất cả các GroupBox trong form thành màu trắng
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is GroupBox)
+                {
+                    //ẩn button trong groupbox
+                    foreach (Control innerCtrl in ctrl.Controls)
+                    {
+                        if (innerCtrl is Button)
+                        {
+                            innerCtrl.Visible = false; 
+                        }
+                    }
+                    ctrl.BackColor = Color.White;
+                }
+            }
+
+            // Ẩn tất cả các nút button trong form
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Button)
+                {
+                    ctrl.Visible = false; 
+                }
+            }
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PNG Image|*.png";
             saveFileDialog.Title = "Lưu Form Dưới Dạng Hình Ảnh";
@@ -193,6 +220,31 @@ namespace quanlynhansach
 
                 MessageBox.Show("File đã được lưu thành công dưới dạng hình ảnh!", "Thông báo");
             }
+            // Khôi phục lại màu nền của các GroupBox
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is GroupBox)
+                {
+                    //hiển thị lại button trong groupbox
+                    foreach (Control innerCtrl in ctrl.Controls)
+                    {
+                        if (innerCtrl is Button)
+                        {
+                            innerCtrl.Visible = true; 
+                        }
+                    }
+                    ctrl.BackColor = Color.PaleTurquoise;  
+                }
+            }
+
+            // Hiển thị lại tất cả các nút button sau khi lưu xong
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Button)
+                {
+                    ctrl.Visible = true; 
+                }
+            }
         }
 
         private void btnLuuCSDL_Click(object sender, EventArgs e)
@@ -204,6 +256,19 @@ namespace quanlynhansach
                 int slpn = 0;
                 DateTime ngaynhap = dateNgayNhap.Value;
                 string cbNXB = cmbNXB.SelectedItem.ToString();
+                //kiểm tra mã đơn hàng có tồn tại trong csdl chưa
+                string queryCheck_MN = "SELECT COUNT (*) FROM qlnhap WHERE somanhap=@somanhap";
+                using (SqlCommand cmdKT = new SqlCommand(queryCheck_MN, cn))
+                {
+                    cmdKT.Parameters.AddWithValue("@somanhap", sophieunhap);
+                    int count=Convert.ToInt32(cmdKT.ExecuteScalar());
+                    if (count > 0)
+                    {
+                        MessageBox.Show($"Mã phiếu nhập {sophieunhap} đã tồn tại. Vui lòng nhập mã khác.");
+                        return; 
+                    }
+                }
+                //thêm dữ liệu vào bảng qlnhap
                 string query = "INSERT INTO qlnhap(somanhap, ngaynhap, soluong )" +
                              "VALUES(@somanhap,@ngaynhap,@soluong)";
                 SqlCommand cmdPhieuNhap = new SqlCommand(query, cn);
@@ -213,6 +278,7 @@ namespace quanlynhansach
                     cmdPhieuNhap.Parameters.AddWithValue("@soluong", slpn);
                     cmdPhieuNhap.ExecuteNonQuery();
                 }
+                //thêm dữ liệu vào bảng books
                 string queryBooks = "INSERT INTO books(masach,tensach,tacgia,NXB,theloai,giaban,sachtk)" +
                     "VALUES(@masach,@tensach,@tacgia,@NXB,@theloai,@giaban,@sachtk)";
                 using (SqlCommand cmdInsertBooks = new SqlCommand(queryBooks, cn))
@@ -247,7 +313,7 @@ namespace quanlynhansach
                                     cmdUpdate.Parameters.AddWithValue("@masach", masach);
                                     cmdUpdate.Parameters.AddWithValue("@soluong", soluong);
                                     cmdUpdate.ExecuteNonQuery();
-                                    MessageBox.Show("Mã sách đã tồn tại: Đã cập nhật lại số lượng sách");
+                                    MessageBox.Show($"Mã sách {masach} đã tồn tại: Đã cập nhật lại số lượng sách");
                                 }
                             }
                             else
@@ -262,8 +328,9 @@ namespace quanlynhansach
 
                                 // Thực thi câu lệnh INSERT
                                 cmdInsertBooks.ExecuteNonQuery();
-                                MessageBox.Show("Sách chưa có trong kho: Đã thêm sách mới");
+                                MessageBox.Show($"Mã sách {masach} chưa có trong kho: Đã thêm sách mới");
                             }
+                            //thêm dữ liệu vào bảng chitiet_nhap
                             string queryChitietNhap = "INSERT INTO chitiet_nhap(somanhap, masach, soluong )" +
                             "VALUES(@somanhap,@masach,@soluong)";
                             SqlCommand cmdChitietNhap = new SqlCommand(queryChitietNhap, cn);
@@ -273,6 +340,7 @@ namespace quanlynhansach
                                 cmdChitietNhap.Parameters.AddWithValue("@soluong", soluong);
                                 cmdChitietNhap.ExecuteNonQuery();
                             }
+                            //cập nhật lại số lượng sách của phiếu nhập
                             string queryUpdatePhieuNhap = "UPDATE qlnhap SET soluong = soluong + @soluong WHERE somanhap = @somanhap";
                             using (SqlCommand cmdUpdatePhieuNhap = new SqlCommand(queryUpdatePhieuNhap, cn))
                             {
@@ -282,8 +350,9 @@ namespace quanlynhansach
                             }
                         }
                     }
-                   
+                    MessageBox.Show("Thao tác thành công", "Thông báo");
                 }
+                
             }
             catch (Exception ex)
             {

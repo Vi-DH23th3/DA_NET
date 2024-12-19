@@ -47,37 +47,13 @@ namespace quanlynhansach
                 this.Hide();
         }
 
-        /*
-       public void loadListview()
-       {
-           Moketnoi(cn);
-           cmdSelect = new SqlCommand("secect n.*,c.somanhap from qlnhap n where n.somanhap=c.somanhap", cn);
-           SqlDataReader r=cmdSelect.ExecuteReader();
-           listView1.Items.Clear();
-           while(r.Read())
-           {
-               string[] st = new string[4];
-               st[0] = r[0].ToString();
-               st[1] = r[1].ToString();
-               st[2] = r[2].ToString();
-               st[3] = r[3].ToString();
-               ListViewItem lv=new ListViewItem(st);
-               listView1.Items.Add(lv);
-           }    
-           cmdSelect.Dispose();
-       }
-       */
         public void loadListview()
         {
             
             try
             {
-                if(cn.State!=ConnectionState.Open)
-                {
-                    cn.Open();
-                }    
-                //Moketnoi(cn);
-                // Cập nhật lại câu truy vấn để chỉ rõ các cột cần thiết
+                Moketnoi(cn);
+               
                 string query = "SELECT n.somanhap, n.ngaynhap, c.masach, c.soluong " +
                                "FROM qlnhap n INNER JOIN chitiet_nhap c ON n.somanhap = c.somanhap";
 
@@ -89,7 +65,6 @@ namespace quanlynhansach
 
                         while (r.Read())
                         {
-                            // Giả sử bạn lấy 4 cột từ câu truy vấn
                             string[] st = new string[4];
                             st[0] = r["somanhap"].ToString();
                             st[1] = r["masach"].ToString();

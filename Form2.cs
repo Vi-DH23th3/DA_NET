@@ -16,7 +16,7 @@ namespace quanlynhansach
         {
             InitializeComponent();
         }
-
+        public string tendn;
         private void thoatStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult traloi;
@@ -24,35 +24,60 @@ namespace quanlynhansach
             if (traloi == DialogResult.OK ) 
                 Application.Exit();
         }
-
+        //Menu open form 3: nhập sách
         private void nhapStripMenuItem1_Click(object sender, EventArgs e)
         {
             Form3 f3=new Form3();
             f3.ShowDialog();
         }
-
+        //Menu open form4: bán sách
         private void banlStripMenuItem2_Click(object sender, EventArgs e)
         {
             Form4 f4=new Form4();
             f4.ShowDialog();
         }
-
+        //Menu open form5: Thống kê nhập sách
         private void tk_nhapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form5 f5 =new Form5();
-            f5.ShowDialog();
-        }
+            if(tendn=="nv")
+            {
+                MessageBox.Show("Bạn không có quyền truy cập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+           else
+            {
+                Form5 f5 = new Form5();
+                f5.ShowDialog();
+            }
 
+        }
+        //Menu open form6: thống kê doanh thu
         private void tk_doanhThuToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form6 f6 =new Form6();
-            f6.ShowDialog();
-        }
 
+            if (tendn == "nv")
+            {
+                MessageBox.Show("Bạn không có quyền truy cập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                Form6 f6 = new Form6();
+                f6.ShowDialog();
+            }
+           
+        }
+        //Menu open form7: thống kê sách tồn kho
         private void tk_stkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form7 f7 =new Form7();
-            f7.ShowDialog();
+            if (tendn == "nv")
+            {
+                MessageBox.Show("Bạn không có quyền truy cập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                Form7 f7 = new Form7();
+                f7.ShowDialog();
+            }
+            
         }
     }
 }

@@ -49,7 +49,7 @@ namespace quanlynhansach
                     
                     using (SqlDataReader r = cmdSelect.ExecuteReader())
                     {
-                        // Xóa tất cả mục cũ trong ListView
+                        
                         listView1.Items.Clear();
 
                         while (r.Read())

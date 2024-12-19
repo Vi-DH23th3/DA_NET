@@ -45,7 +45,7 @@ namespace quanlynhansach
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            // Kiểm tra các ô nhập liệu
+            // Kiểm tra các ô nhập dữ liệu
             if (string.IsNullOrWhiteSpace(txtMaSach.Text) ||
                 string.IsNullOrWhiteSpace(txtTenSach.Text) ||
                 string.IsNullOrWhiteSpace(txtSoLuong.Text) ||
@@ -142,23 +142,73 @@ namespace quanlynhansach
 
         private void btnLuuFile_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PNG Image|*.png";
-            saveFileDialog.Title = "Lưu Form Dưới Dạng Hình Ảnh";
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            // Đổi màu nền của tất cả các GroupBox trong form thành màu trắng
+            foreach (Control ctrl in this.Controls)
             {
-                string filePath = saveFileDialog.FileName;
-
-                // Chụp ảnh giao diện form
-                using (Bitmap bmp = new Bitmap(this.Width, this.Height))
+                if (ctrl is GroupBox)
                 {
-                    this.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                    bmp.Save(filePath, ImageFormat.Png);
+                    //ẩn button trong groupbox
+                    foreach (Control innerCtrl in ctrl.Controls)
+                    {
+                        if (innerCtrl is Button)
+                        {
+                            innerCtrl.Visible = false;
+                        }
+                    }
+                    ctrl.BackColor = Color.White;
                 }
-
-                MessageBox.Show("File đã được lưu thành công dưới dạng hình ảnh!", "Thông báo");
             }
+            // Ẩn tất cả các nút button trong form 
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Button)
+                {
+                    ctrl.Visible = false;
+                }
+            }
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+             saveFileDialog.Filter = "PNG Image|*.png";
+             saveFileDialog.Title = "Lưu Form Dưới Dạng Hình Ảnh";
+
+             if (saveFileDialog.ShowDialog() == DialogResult.OK)
+             {
+                 string filePath = saveFileDialog.FileName;
+
+                 // Chụp ảnh giao diện form
+                 using (Bitmap bmp = new Bitmap(this.Width, this.Height))
+                 {
+                     this.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+                     bmp.Save(filePath, ImageFormat.Png);
+                 }
+
+                 MessageBox.Show("File đã được lưu thành công dưới dạng hình ảnh!", "Thông báo");
+             }
+            // Khôi phục lại màu nền của các GroupBox
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is GroupBox)
+                {
+                    //hiển thị lại button trong groupbox
+                    foreach (Control innerCtrl in ctrl.Controls)
+                    {
+                        if (innerCtrl is Button)
+                        {
+                            innerCtrl.Visible = true;
+                        }
+                    }
+                    ctrl.BackColor = Color.FromArgb(192, 192, 255);
+                }
+            }
+
+            // Hiển thị lại tất cả các nút button sau khi lưu xong
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is Button)
+                {
+                    ctrl.Visible = true;
+                }
+            }
+           
         }
 
         private void lstHoaDon_Click(object sender, EventArgs e)
@@ -174,22 +224,20 @@ namespace quanlynhansach
         {
             try
             {
-                Moktenoi(cn); // Mở kết nối (đảm bảo kết nối đã được mở)
+                Moktenoi(cn); 
 
                 string query = "SELECT * FROM books WHERE masach = @masach";
                 using (SqlCommand cmdMS = new SqlCommand(query, cn))
                 {
-                    // Thêm tham số vào câu truy vấn
+
                     cmdMS.Parameters.AddWithValue("@masach", txtMaSach.Text);
 
-                    // Thực thi câu truy vấn và lấy kết quả
                     using (SqlDataReader reader = cmdMS.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             while (reader.Read())
                             {
-                                // Đọc dữ liệu từ reader và gán vào các TextBox
                                 txtTenSach.Text = reader["tensach"].ToString();
                                 txtGiaSach.Text = reader["giaban"].ToString();
                             }
@@ -203,7 +251,7 @@ namespace quanlynhansach
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message); // Xử lý lỗi nếu có
+                MessageBox.Show("Lỗi: " + ex.Message); 
             }
         }
 
@@ -224,19 +272,33 @@ namespace quanlynhansach
                 string tenkh = txtTenKH.Text;
                 float tongtien=float.Parse(txtTong.Text);
                 DateTime ngayban = dateNgayBan.Value;
-
+                //kiểm tra mã đơn hàng đã tồn tại chưa
+                string queryCheckOrderId = "SELECT COUNT(*) FROM qlbanhang WHERE madonhang = @madonhang";
+                using (SqlCommand cmdCheck = new SqlCommand(queryCheckOrderId, cn))
                 {
-                    string queryBH = "INSERT INTO qlbanhang(madonhang,tenkh,ngayban,tongtien)" +
-                          "VALUES(@madonhang,@tenkh,@ngayban,@tongtien)";
-                    using (SqlCommand cmdBH = new SqlCommand(queryBH, cn))
-                    {
-                        cmdBH.Parameters.AddWithValue("@madonhang", mahd);
-                        cmdBH.Parameters.AddWithValue("@tenkh", tenkh);
-                        cmdBH.Parameters.AddWithValue("@ngayban", ngayban);
-                        cmdBH.Parameters.AddWithValue("@tongtien", tongtien);
+                    cmdCheck.Parameters.AddWithValue("@madonhang", mahd);
+                    int count = Convert.ToInt32(cmdCheck.ExecuteScalar());
 
-                        cmdBH.ExecuteNonQuery();
+                    if (count > 0)
+                    {
+                        MessageBox.Show($"Mã đơn hàng {mahd} đã tồn tại. Vui lòng nhập mã khác.");
+                        return; 
                     }
+                }
+                //thêm dữ liệu vào bảng ql bán hàng
+                string queryBH = "INSERT INTO qlbanhang(madonhang,tenkh,ngayban,tongtien)" +
+                          "VALUES(@madonhang,@tenkh,@ngayban,@tongtien)";
+                using (SqlCommand cmdBH = new SqlCommand(queryBH, cn))
+                {
+                    cmdBH.Parameters.AddWithValue("@madonhang", mahd);
+                    cmdBH.Parameters.AddWithValue("@tenkh", tenkh);
+                    cmdBH.Parameters.AddWithValue("@ngayban", ngayban);
+                    cmdBH.Parameters.AddWithValue("@tongtien", tongtien);
+
+                    cmdBH.ExecuteNonQuery();
+                }
+                {
+                    
                     foreach (ListViewItem item in lstHoaDon.Items)
                     {
                         string masach = item.SubItems[0].Text;
@@ -282,7 +344,8 @@ namespace quanlynhansach
                                         MessageBox.Show("Đã cập nhật lại số lượng sách trong kho");
                                     }
                                 }
-                            }                           
+                            }
+                            
                             string queryCT_BS = "INSERT INTO chitiet_bansach(madonhang,masach,solg)"
                                 + "VALUES(@madonhang,@masach,@solg)";
                             using (SqlCommand cmdCT_BS = new SqlCommand(queryCT_BS, cn))
@@ -293,12 +356,10 @@ namespace quanlynhansach
 
                                 cmdCT_BS.ExecuteNonQuery();
                             }
-                        }
-                       
+                        }                      
                     }
-                    MessageBox.Show("Đã lưu dữ liệu thành công", "Thông báo");
                 }
-
+                MessageBox.Show("Hóa đơn đã được lưu thành công.");
             }
             catch (Exception ex) { MessageBox.Show($"Lỗi:{ex.Message}"); }
         }

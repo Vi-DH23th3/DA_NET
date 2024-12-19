@@ -80,13 +80,13 @@
             // 
             this.soluong.Text = "Số lượng";
             this.soluong.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.soluong.Width = 235;
+            this.soluong.Width = 186;
             // 
             // ngaynhap
             // 
             this.ngaynhap.Text = "Ngày nhập";
             this.ngaynhap.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ngaynhap.Width = 284;
+            this.ngaynhap.Width = 200;
             // 
             // btnThoat
             // 

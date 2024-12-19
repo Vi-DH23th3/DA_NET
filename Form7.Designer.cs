@@ -42,6 +42,7 @@
             // 
             // btnThoat
             // 
+            this.btnThoat.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThoat.Location = new System.Drawing.Point(476, 532);
             this.btnThoat.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnThoat.Name = "btnThoat";
@@ -102,7 +103,7 @@
             // 
             // giaban
             // 
-            this.giaban.Text = "Gía bán";
+            this.giaban.Text = "Giá bán";
             this.giaban.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.giaban.Width = 137;
             // 

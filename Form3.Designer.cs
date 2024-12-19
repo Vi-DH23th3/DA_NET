@@ -66,6 +66,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.btnTong = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -456,7 +457,7 @@
             this.btnTong.BackColor = System.Drawing.Color.White;
             this.btnTong.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.btnTong.Location = new System.Drawing.Point(379, 741);
+            this.btnTong.Location = new System.Drawing.Point(771, 748);
             this.btnTong.Name = "btnTong";
             this.btnTong.Size = new System.Drawing.Size(99, 44);
             this.btnTong.TabIndex = 22;
@@ -464,12 +465,23 @@
             this.btnTong.UseVisualStyleBackColor = false;
             this.btnTong.Click += new System.EventHandler(this.btnTong_Click);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(451, 762);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 23);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "Tổng";
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.ClientSize = new System.Drawing.Size(913, 797);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.btnTong);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.txtTong);
@@ -533,5 +545,6 @@
         private System.Windows.Forms.ColumnHeader soluong;
         private System.Windows.Forms.ColumnHeader gianhap;
         private System.Windows.Forms.Button btnTong;
+        private System.Windows.Forms.Label label11;
     }
 }
