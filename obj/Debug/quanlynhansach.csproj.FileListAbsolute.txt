@@ -1,0 +1,16 @@
+D:\laptrinh.net\quanlynhansach\quanlynhansach\bin\Debug\quanlynhansach.exe.config
+D:\laptrinh.net\quanlynhansach\quanlynhansach\bin\Debug\quanlynhansach.exe
+D:\laptrinh.net\quanlynhansach\quanlynhansach\bin\Debug\quanlynhansach.pdb
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.csproj.AssemblyReference.cache
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form1.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form2.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form3.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form4.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Properties.Resources.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.csproj.GenerateResource.cache
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.csproj.CoreCompileInputs.cache
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.exe
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.pdb
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form5.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form6.resources
+D:\laptrinh.net\quanlynhansach\quanlynhansach\obj\Debug\quanlynhansach.Form7.resources
